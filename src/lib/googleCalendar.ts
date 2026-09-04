@@ -73,7 +73,7 @@ export function createGoogleCalendarUrl(data: ReservationCalendarData): string {
     notes ? `Special Notes: ${notes}` : null,
     `----------------------------------------`,
     `Address: 2636 Hylan Boulevard, Suite 115, Staten Island, NY 10306`,
-    `Phone: (718) 290-9375`,
+    `Phone: (718) 799-4232`,
   ]
     .filter(Boolean)
     .join('\n');
