@@ -22,7 +22,7 @@ export const venueInfo = {
     { day: 'Tuesday', time: '5:00 PM – 2:00 AM' },
     { day: 'Wednesday', time: '5:00 PM – 2:00 AM' },
     { day: 'Thursday', time: '5:00 PM – 2:00 AM' },
-    { day: 'Friday', time: '5:00 PM – 2:00 AM' },
+    { day: 'Friday', time: '5:00 PM – 4:00 AM' },
     { day: 'Saturday', time: '5:00 PM – 4:00 AM' },
     { day: 'Sunday', time: '5:00 PM – 2:00 AM' },
   ],

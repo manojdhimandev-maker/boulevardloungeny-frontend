@@ -39,7 +39,7 @@ const socialPosts = [
     caption: 'Smoke. Sip. Stay a while 💨 Fresh pineapple fruit head hookah! #HookahLounge',
   },
   {
-    image: '/instaposts-imeages/event_vip_saturday.jpg',
+    image: '/girlImage.jpg',
     likes: '1,890',
     comments: '76',
     caption: 'Birthday celebrations done right with VIP bottle service! 🍾🎂 #BoulevardSaturdays',

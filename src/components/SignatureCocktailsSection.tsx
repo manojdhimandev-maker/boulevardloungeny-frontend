@@ -110,8 +110,7 @@ const CocktailCard: React.FC<{
         <img
           src={item.images[currentImgIndex]}
           alt={`${item.name} angle ${currentImgIndex + 1}`}
-          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 brightness-90 group-hover:brightness-100 cursor-pointer"
-          onClick={() => onOpenLightbox(item.images, currentImgIndex, item.name)}
+          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 brightness-90 group-hover:brightness-100"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/20 to-transparent pointer-events-none" />
 

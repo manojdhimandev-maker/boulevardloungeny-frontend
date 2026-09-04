@@ -28,7 +28,7 @@ const mosaicItems = [
   {
     title: 'Birthday & VIP Tables',
     tag: 'CELEBRATIONS',
-    image: '/instaposts-imeages/event_vip_saturday.jpg',
+    image: 'girlImage.jpg',
     span: 'col-span-1 row-span-1',
   },
   {

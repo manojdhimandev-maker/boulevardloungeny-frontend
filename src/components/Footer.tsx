@@ -12,19 +12,14 @@ export default function Footer({ onNavigate }: FooterProps) {
       <div className="absolute inset-0 bg-noise opacity-40 pointer-events-none" />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8 py-10 sm:py-14 grid gap-8 md:grid-cols-4">
         <div className="md:col-span-1">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex flex-col items-start gap-1.5 mb-4">
             <img
-              src="/logo.png"
+              src="/updatedLogo.png"
               alt="The Boulevard Lounge Logo"
-              className="h-10 w-10 object-cover rounded-full border border-gold-400/50 shadow-md shadow-gold-400/20"
+              className="h-11 w-11 sm:h-14 sm:w-14 object-cover rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black"
             />
-            <span className="flex flex-col">
-              <span className="font-display text-xl font-normal tracking-[0.25em] uppercase text-ink-100 leading-none">
-                The Boulevard
-              </span>
-              <span className="text-gold-400 text-[8px] tracking-[0.2em] uppercase mt-1 font-body font-medium">
-                Staten Island's premier lounge
-              </span>
+            <span className="text-gold-300 text-[9px] tracking-[0.18em] uppercase font-fashion font-bold">
+              Staten Island's Premier Lounge
             </span>
           </div>
           <p className="text-ink-300 text-sm leading-relaxed max-w-xs">
@@ -38,6 +33,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             {[
               { id: 'home' as PageId, label: 'Home' },
               { id: 'menu' as PageId, label: 'Menu' },
+              { id: 'happy-hour' as PageId, label: 'Happy Hour' },
               { id: 'reservations' as PageId, label: 'Reservations' },
               { id: 'events' as PageId, label: 'Events' },
               { id: 'private-events' as PageId, label: 'Private Events' },

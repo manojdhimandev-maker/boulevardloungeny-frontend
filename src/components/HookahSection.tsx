@@ -80,7 +80,7 @@ export const HookahSection: React.FC<HookahSectionProps> = ({ onNavigate }) => {
               playsInline
               className="w-full h-[420px] object-cover rounded-sm border border-gold-400/20"
             />
-            <div className="absolute bottom-6 left-6 right-6 p-4 bg-ink-950/90 backdrop-blur border border-gold-400/30 rounded-sm">
+            {/* <div className="absolute bottom-6 left-6 right-6 p-4 bg-ink-950/90 backdrop-blur border border-gold-400/30 rounded-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] text-gold-400 tracking-widest font-bold uppercase block">SERVED NIGHTLY</span>
@@ -88,7 +88,7 @@ export const HookahSection: React.FC<HookahSectionProps> = ({ onNavigate }) => {
                 </div>
                 <span className="font-fashion text-2xl font-bold text-gold-400">$35+</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

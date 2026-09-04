@@ -307,7 +307,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <button
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full bg-gold-gradient text-ink-950 font-bold py-4 rounded-xl shadow-lg hover:shadow-gold-500/30 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                  className="btn-gold w-full text-xs font-bold py-4 flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {status === 'submitting' ? (
                     <>

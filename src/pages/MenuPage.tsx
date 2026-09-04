@@ -34,9 +34,9 @@ const INSTA_COCKTAIL = '/instaposts-imeages/menu_card_cocktails.jpg';
 const INSTA_BOTTLE_LEFT = '/instaposts-imeages/menu_card_bottles.jpg';
 const INSTA_BOTTLE_RIGHT = '/instaposts-imeages/vip_suite_champagne.jpg';
 const INSTA_APPETIZER = '/instaposts-imeages/candlelit_intimate_dining.jpg';
-const INSTA_SALAD = '/instaposts-imeages/fine_dining_cuisine.jpg';
+const INSTA_SALAD = '/instaposts-imeages/salad.png';
 const INSTA_PASTA = '/instaposts-imeages/menu_card_mains.jpg';
-const INSTA_MAINS = '/instaposts-imeages/fine_dining_cuisine.jpg';
+const INSTA_MAINS = '/instaposts-imeages/main_course2.jpg';
 const INSTA_DESSERT = '/instaposts-imeages/drink_love_bomb.jpg';
 
 export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps) {
@@ -77,42 +77,44 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
   return (
     <div className="min-h-screen pt-28 pb-24 bg-[#080808] text-white">
       {/* ── STICKY NAV BAR ── */}
-      <div className="sticky top-20 z-40 mb-10 mx-4 sm:mx-8 p-2 bg-[#0c0c0c]/95 backdrop-blur-xl border border-[#B58A3B]/25 rounded-2xl shadow-2xl flex flex-wrap items-center justify-between gap-2">
+      <div className="sticky top-16 sm:top-20 z-40 mb-6 sm:mb-10 mx-2 sm:mx-8 p-1.5 sm:p-2 bg-ink-950/95 backdrop-blur-xl border border-gold-400/30 rounded-sm shadow-2xl flex flex-col md:flex-row items-center justify-between gap-2">
         {/* Category pills */}
-        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+        <div className="flex items-center gap-1 sm:gap-1.5 w-full md:w-auto md:flex-1 min-w-0">
           <button onClick={() => scrollNav('left')} aria-label="Scroll left"
-            className="p-2 rounded-xl bg-[#141414] border border-zinc-800 text-zinc-400 hover:text-[#B58A3B] hover:border-[#B58A3B]/40 transition-all shrink-0">
+            className="p-1.5 rounded-sm bg-ink-950/80 border border-gold-400/30 text-white hover:text-gold-200 hover:border-gold-400/60 transition-all shrink-0">
             <ChevronLeft size={16} />
           </button>
-          <div ref={navScrollRef} className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
+          <div ref={navScrollRef} className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none py-1 w-full">
             {menu.map((sec) => (
               <button key={sec.id} onClick={() => jumpToCategory(sec.id)}
-                className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider whitespace-nowrap transition-all shrink-0 ${
-                  activeSectionId === sec.id
-                    ? 'bg-gradient-to-r from-[#B58A3B] via-[#F4E7C5] to-[#86652A] text-black shadow-lg'
-                    : 'bg-[#141414] border border-zinc-800 text-zinc-300 hover:text-[#B58A3B] hover:border-[#B58A3B]/40'
-                }`}>{sec.label}</button>
+                className={`px-3 py-1.5 rounded-sm text-[10px] sm:text-[11px] font-fashion font-bold uppercase tracking-[0.14em] whitespace-nowrap transition-all shrink-0 ${activeSectionId === sec.id
+                    ? 'bg-gold-400 text-black border border-gold-400 shadow-md shadow-gold-400/20'
+                    : 'bg-ink-950/80 border border-gold-400/30 text-white hover:text-gold-200 hover:border-gold-400/60'
+                  }`}>{sec.label}</button>
             ))}
           </div>
           <button onClick={() => scrollNav('right')} aria-label="Scroll right"
-            className="p-2 rounded-xl bg-[#141414] border border-zinc-800 text-zinc-400 hover:text-[#B58A3B] hover:border-[#B58A3B]/40 transition-all shrink-0">
+            className="p-1.5 rounded-sm bg-ink-950/80 border border-gold-400/30 text-white hover:text-gold-200 hover:border-gold-400/60 transition-all shrink-0">
             <ChevronRight size={16} />
           </button>
         </div>
 
         {/* View mode buttons */}
-        <div className="flex items-center gap-1 bg-[#141414] p-1 rounded-xl border border-[#B58A3B]/20 shrink-0">
+        <div className="flex items-center justify-center gap-1.5 bg-ink-950/80 p-1 rounded-sm border border-gold-400/30 w-full md:w-auto overflow-x-auto scrollbar-none shrink-0">
           {([
-            ['pdf-replica', 'PDF Replica', FileText],
-            ['bistro', 'Bistro', ListFilter],
-            ['grid', 'Grid', LayoutGrid],
-            ['document', 'PDF Spreads', Layers],
+            ['pdf-replica', 'PDF REPLICA', FileText],
+            ['bistro', 'BISTRO', ListFilter],
+            ['grid', 'GRID', LayoutGrid],
+            ['document', 'SPREADS', Layers],
           ] as const).map(([mode, label, Icon]) => (
             <button key={mode} onClick={() => setViewMode(mode as ViewMode)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-wider uppercase transition-all flex items-center gap-1 ${
-                viewMode === mode ? 'bg-[#B58A3B] text-black shadow' : 'text-zinc-400 hover:text-white'
+              className={`px-2.5 sm:px-3 py-1.5 rounded-sm text-[9px] sm:text-[10px] font-fashion font-bold tracking-[0.14em] uppercase transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                viewMode === mode
+                  ? 'bg-gold-400 text-black border border-gold-400 shadow-md shadow-gold-400/20'
+                  : 'bg-ink-950/80 border border-gold-400/30 text-white hover:text-gold-200 hover:border-gold-400/60'
               }`}>
-              <Icon size={12} /> {label}
+              <Icon size={12} className="shrink-0" />
+              <span>{label}</span>
             </button>
           ))}
         </div>
@@ -138,7 +140,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
             >
               {/* Logo */}
               <div style={{ position: 'absolute', top: '50px', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
-                <img src="/dark logo.png" alt="The Boulevard Lounge" style={{ height: '145px', width: 'auto', objectFit: 'contain', margin: '0 auto', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} />
+                <img src="/updatedLogo.png" alt="The Boulevard Lounge" style={{ height: '145px', width: '145px', borderRadius: '50%', border: '3px solid #D4AF37', boxShadow: '0 10px 25px rgba(212,175,55,0.4)', backgroundColor: '#000000', objectFit: 'cover', margin: '0 auto' }} />
               </div>
 
               {/* Header Title Section */}
@@ -251,7 +253,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
             {/* Mobile / Responsive Card View (xl:hidden) */}
             <div className="xl:hidden w-full max-w-3xl bg-[#1B1B1B] border border-[#B58A3B]/30 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-6">
               <div className="text-center">
-                <img src="/dark logo.png" alt="The Boulevard Lounge" className="h-16 sm:h-20 w-auto mx-auto mb-3 object-contain" />
+                <img src="/updatedLogo.png" alt="The Boulevard Lounge" className="h-16 w-16 sm:h-20 sm:w-20 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto mb-3" />
                 <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#B58A3B] tracking-wider leading-none">DRINKS</h1>
                 <h2 className="font-serif text-xl sm:text-2xl font-semibold text-[#F4F2EE] tracking-widest mt-1">CRAFT COCKTAILS</h2>
                 <div className="w-32 h-1 mx-auto mt-3 bg-gradient-to-r from-[#E1B74F] via-[#D2A23C] to-[#8C5E18] rounded-full" />
@@ -308,7 +310,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
 
             {/* CENTER column content */}
             <div className="flex-1 bg-[#0e0e0e] px-5 sm:px-12 py-12 lg:py-16 text-center flex flex-col justify-center">
-              <img src="/dark logo.png" alt="Boulevard Lounge" className="w-14 h-14 object-contain mx-auto mb-4" />
+              <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-14 h-14 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto mb-4" />
 
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F4F2EE] tracking-wide leading-tight">
                 BOTTLE RESERVE
@@ -376,7 +378,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
             <div className="flex-1 px-5 sm:px-12 lg:px-20 py-10 lg:py-16 flex flex-col max-w-4xl">
               {/* Header */}
               <div className="text-center lg:text-right mb-8">
-                <img src="/dark logo.png" alt="Boulevard Lounge" className="w-12 h-12 object-contain mx-auto lg:ml-auto lg:mr-0 mb-3" />
+                <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-12 h-12 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto lg:ml-auto lg:mr-0 mb-3" />
                 <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F4F2EE] tracking-wide leading-tight">
                   HOOKAH VAULT
                 </h2>
@@ -447,11 +449,11 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
               <div className="mt-auto pt-4 flex flex-col sm:flex-row gap-3 justify-end">
                 <div className="border border-[#B58A3B] rounded-lg p-3 text-center sm:min-w-[140px]">
                   <p className="font-serif text-sm text-[#B58A3B] italic font-semibold mb-1">Upgrade Base:</p>
-                  <p className="font-sans text-xs text-[#EEECE8] leading-normal">Milk $10 | Wine $15<br/>Fruit $20</p>
+                  <p className="font-sans text-xs text-[#EEECE8] leading-normal">Milk $10 | Wine $15<br />Fruit $20</p>
                 </div>
                 <div className="border border-[#B58A3B] rounded-lg p-3 text-center sm:min-w-[140px]">
                   <p className="font-serif text-sm text-[#B58A3B] italic font-semibold mb-1">Hookah Damage:</p>
-                  <p className="font-sans text-xs text-[#EEECE8] leading-normal">Base $200 | Bowl $100<br/>Kaloud $60</p>
+                  <p className="font-sans text-xs text-[#EEECE8] leading-normal">Base $200 | Bowl $100<br />Kaloud $60</p>
                 </div>
               </div>
 
@@ -471,7 +473,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
           <section id="menu-section-appetizers-salads" className="scroll-mt-32 bg-[radial-gradient(ellipse_at_50%_0%,_#131208_0%,_#0a0a0a_70%)] min-h-screen">
             <div className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 space-y-8">
               <div className="text-center pt-4">
-                <img src="/dark logo.png" alt="Boulevard Lounge" className="w-14 h-14 object-contain mx-auto" />
+                <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-14 h-14 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto" />
               </div>
 
               {/* TOP HALF: APPETIZERS + Photo */}
@@ -566,7 +568,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
                     <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#B58A3B] tracking-wide">
                       PASTA CRAFT
                     </h2>
-                    <img src="/dark logo.png" alt="Boulevard Lounge" className="w-12 h-12 object-contain" />
+                    <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-12 h-12 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover" />
                   </div>
 
                   <div className="space-y-4">
@@ -589,11 +591,11 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
                   <div className="grid grid-cols-2 border border-[#B58A3B]/40 rounded-lg overflow-hidden bg-[#0d0d0d]">
                     <div className="p-3 sm:p-4 border-r border-[#B58A3B]/40">
                       <p className="font-serif text-xs sm:text-sm font-bold text-[#B58A3B] tracking-widest mb-1">SAUCES</p>
-                      <p className="font-sans text-[11px] text-[#EEECE8] leading-relaxed">ALFREDO SAUCE<br/>GARLIC AND OIL</p>
+                      <p className="font-sans text-[11px] text-[#EEECE8] leading-relaxed">ALFREDO SAUCE<br />GARLIC AND OIL</p>
                     </div>
                     <div className="p-3 sm:p-4">
                       <p className="font-serif text-xs sm:text-sm font-bold text-[#B58A3B] tracking-widest mb-1">ADD</p>
-                      <p className="font-sans text-[11px] text-[#EEECE8] leading-relaxed">CHICKEN $5 | STEAK $7 |<br/>SHRIMP $7</p>
+                      <p className="font-sans text-[11px] text-[#EEECE8] leading-relaxed">CHICKEN $5 | STEAK $7 |<br />SHRIMP $7</p>
                     </div>
                   </div>
                 </div>
@@ -644,7 +646,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
           <section id="menu-section-platters-sandwiches" className="scroll-mt-32 bg-[radial-gradient(ellipse_at_50%_0%,_#131208_0%,_#0a0a0a_70%)] min-h-screen">
             <div className="max-w-7xl mx-auto w-full px-4 sm:px-8 py-8 sm:py-12 space-y-8">
               <div className="text-center pt-2">
-                <img src="/dark logo.png" alt="Boulevard Lounge" className="w-14 h-14 object-contain mx-auto" />
+                <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-14 h-14 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto" />
               </div>
 
               {/* Two-column layout on desktop, stacked on mobile */}
@@ -778,7 +780,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
             <div className="absolute inset-4 sm:inset-6 border-2 border-[#B58A3B] pointer-events-none" />
 
             <div className="relative text-center max-w-xl w-full py-4 space-y-6">
-              <img src="/dark logo.png" alt="Boulevard Lounge" className="w-14 h-14 sm:w-16 sm:h-16 object-contain mx-auto" />
+              <img src="/updatedLogo.png" alt="Boulevard Lounge" className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 bg-black object-cover mx-auto" />
 
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F4F2EE] tracking-wide leading-tight">
                 THE SUNSET SOIRÉE
@@ -804,7 +806,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
                 <div>
                   <h3 className="font-serif text-xl text-[#B58A3B] italic mb-1">Appetizers & Fresh Salads</h3>
                   <p className="font-sans text-xs text-[#EEECE8] leading-relaxed max-w-md mx-auto">
-                    • The Emperor's Caesar &nbsp;• Signature Lounge Wings &nbsp;• Lounge Tenders<br/>
+                    • The Emperor's Caesar &nbsp;• Signature Lounge Wings &nbsp;• Lounge Tenders<br />
                     • The Big Cheese Sticks &nbsp;• The Hylan Bruschetta
                   </p>
                   <p className="font-serif text-3xl text-[#F4F2EE] font-bold mt-1">$10</p>
@@ -947,7 +949,7 @@ export default function MenuPage({ onNavigate, initialCategory }: MenuPageProps)
           Experience our craft cocktails, fine dining, and VIP lounge atmosphere live at Staten Island's premier lounge.
         </p>
         <button onClick={() => onNavigate('reservations')}
-          className="bg-gradient-to-r from-[#B58A3B] via-[#F4E7C5] to-[#86652A] text-black font-bold py-3 px-8 text-xs rounded-full shadow-lg hover:brightness-110 transition-all inline-flex items-center gap-2">
+          className="btn-gold py-3 px-8 text-xs inline-flex items-center gap-2">
           BOOK TABLE NOW <ChevronRight size={16} />
         </button>
       </div>

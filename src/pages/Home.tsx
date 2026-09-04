@@ -48,8 +48,8 @@ export default function Home({ onNavigate }: HomeProps) {
         <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 pt-24 sm:pt-32 md:pt-36 pb-12 sm:pb-20 md:pb-24 w-full flex flex-col lg:flex-row lg:items-center justify-between gap-8 lg:gap-12">
           {/* LEFT COLUMN: HERO HEADLINE & ACTIONS */}
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 section-tag animate-fade-up">
-              <Flame size={14} className="text-gold-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2.5 section-tag animate-fade-up !text-sm sm:!text-base md:!text-lg font-semibold">
+              <Flame size={18} className="text-gold-400 animate-pulse shrink-0" />
               STATEN ISLAND’S PREMIER LOUNGE
             </div>
 
@@ -90,7 +90,7 @@ export default function Home({ onNavigate }: HomeProps) {
               style={{ animationDelay: '0.4s' }}
             >
               <div>
-                <span className="font-fashion text-3xl font-bold text-gold-400 block leading-none">10 PM</span>
+                <span className="font-fashion text-3xl font-bold text-gold-400 block leading-none">9 PM</span>
                 <span className="font-fashion text-[10px] tracking-[0.2em] uppercase text-ink-300 mt-1 block font-semibold">LIVE DJs WEEKENDS</span>
               </div>
               <div className="h-6 w-[1px] bg-gold-400/20 hidden sm:block" />

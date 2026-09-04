@@ -71,16 +71,19 @@ const emptyForm: FormState = {
 
 const timeSlotGroups = [
   {
-    name: 'Weekend Brunch (Sat & Sun)',
-    slots: ['1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'],
+    name: 'Early Evening & Dining (5:00 PM – 7:30 PM)',
+    slots: ['5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM'],
+    isHappyHourEligible: true,
   },
   {
-    name: 'Happy Hour (5:00 PM – 9:00 PM)',
-    slots: ['5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM'],
+    name: 'Prime Evening Lounge (8:00 PM – 11:30 PM)',
+    slots: ['8:00 PM', '8:30 PM', '9:00 PM', '9:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM'],
+    isHappyHourEligible: false,
   },
   {
-    name: 'Prime Dinner & Lounge (9:00 PM – Close)',
-    slots: ['9:00 PM', '9:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM'],
+    name: 'Late Night Experience (12:00 AM – Closing)',
+    slots: ['12:00 AM', '12:30 AM', '1:00 AM', '1:30 AM', '2:00 AM', '2:30 AM', '3:00 AM', '3:30 AM'],
+    isHappyHourEligible: false,
   },
 ];
 
@@ -163,12 +166,17 @@ export default function Reservations() {
   };
 
   const validateDetailsStep = () => {
-    if (!form.guest_name.trim()) {
-      setErrorMsg('Please enter your full name.');
+    if (!form.guest_name.trim() || form.guest_name.trim().length < 2) {
+      setErrorMsg('Please enter your full name (at least 2 characters).');
       return false;
     }
-    if (!form.phone.trim()) {
-      setErrorMsg('Please enter a valid phone number.');
+    const cleanPhone = form.phone.replace(/[\s\(\)\-\+]/g, '');
+    if (!cleanPhone || cleanPhone.length < 10 || !/^\d+$/.test(cleanPhone)) {
+      setErrorMsg('Please enter a valid 10-digit phone number for SMS confirmation.');
+      return false;
+    }
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setErrorMsg('Please enter a valid email address.');
       return false;
     }
     setErrorMsg('');
@@ -304,15 +312,15 @@ export default function Reservations() {
                 href={googleCalendarUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gold-gradient text-ink-950 font-semibold px-6 py-3.5 rounded-full inline-flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-gold-700/40 transition-all text-sm"
+                className="btn-gold py-3.5 px-6 text-xs inline-flex items-center justify-center gap-2"
               >
-                <CalendarPlus size={18} /> Add to Google Calendar
+                <CalendarPlus size={16} /> ADD TO GOOGLE CALENDAR
               </a>
               <button
                 onClick={reset}
-                className="px-6 py-3.5 rounded-full border border-ink-600 text-ink-200 hover:border-gold-400 hover:text-gold-200 transition-colors text-sm font-medium"
+                className="btn-outline-gold py-3.5 px-6 text-xs"
               >
-                Make Another Reservation
+                MAKE ANOTHER RESERVATION
               </button>
             </div>
           </div>
@@ -338,32 +346,32 @@ export default function Reservations() {
         </div>
 
         {/* WIZARD STEPPER HEADER */}
-        <div className="max-w-2xl mx-auto mb-10 flex items-center justify-between relative px-4">
-          <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-0.5 bg-ink-800 -z-0" />
+        <div className="max-w-2xl mx-auto mb-8 sm:mb-10 flex items-center justify-between relative px-2 sm:px-4">
+          <div className="absolute left-6 right-6 sm:left-8 sm:right-8 top-3.5 sm:top-1/2 -translate-y-1/2 h-0.5 bg-ink-800 -z-0" />
           {[
-            { num: 1, label: 'Date & Guests' },
-            { num: 2, label: 'Time & Seating' },
-            { num: 3, label: 'Your Details' },
-            { num: 4, label: activeDeposit ? 'Deposit Hold' : 'Confirmation' },
+            { num: 1, label: 'Date & Guests', shortLabel: 'Date' },
+            { num: 2, label: 'Time & Seating', shortLabel: 'Time' },
+            { num: 3, label: 'Your Details', shortLabel: 'Details' },
+            { num: 4, label: activeDeposit ? 'Deposit Hold' : 'Confirmation', shortLabel: 'Confirm' },
           ].map((s) => (
             <button
               key={s.num}
               onClick={() => setStep(s.num)}
-              className="relative z-10 flex flex-col items-center gap-1.5 cursor-pointer group"
+              className="relative z-10 flex flex-col items-center gap-1 sm:gap-1.5 cursor-pointer group"
             >
               <div
-                className={`w-9 h-9 rounded-full grid place-items-center font-display text-base font-bold transition-all ${
-                  step === s.num
-                    ? 'bg-gold-gradient text-ink-950 ring-4 ring-gold-500/20 scale-110 shadow-lg'
+                className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full grid place-items-center font-display text-xs sm:text-base font-bold transition-all ${step === s.num
+                    ? 'bg-gold-400 text-ink-950 ring-2 sm:ring-4 ring-gold-500/20 scale-105 sm:scale-110 shadow-lg'
                     : step > s.num
-                    ? 'bg-gold-700 text-gold-100'
-                    : 'bg-ink-800 text-ink-400 border border-ink-700'
-                }`}
+                      ? 'bg-gold-700 text-gold-100'
+                      : 'bg-ink-800 text-ink-400 border border-ink-700'
+                  }`}
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`text-[0.65rem] sm:text-[0.7rem] font-medium tracking-wider uppercase ${step === s.num ? 'text-gold-200 font-semibold' : 'text-ink-400'}`}>
-                {s.label}
+              <span className={`text-[9px] sm:text-[11px] font-medium tracking-wider uppercase text-center max-w-[65px] sm:max-w-none leading-tight ${step === s.num ? 'text-gold-200 font-semibold' : 'text-ink-400'}`}>
+                <span className="sm:hidden">{s.shortLabel}</span>
+                <span className="hidden sm:inline">{s.label}</span>
               </span>
             </button>
           ))}
@@ -387,11 +395,10 @@ export default function Reservations() {
                           type="button"
                           key={num}
                           onClick={() => update('guest_count', num)}
-                          className={`py-3 rounded-xl font-display text-lg font-light transition-all ${
-                            form.guest_count === num
+                          className={`py-3 rounded-xl font-display text-lg font-light transition-all ${form.guest_count === num
                               ? 'bg-gold-400 text-ink-950 shadow-md font-normal scale-[1.02]'
                               : 'bg-ink-900/60 border border-ink-700 text-ink-200 hover:border-gold-400/50'
-                          }`}
+                            }`}
                         >
                           {num}
                         </button>
@@ -413,57 +420,14 @@ export default function Reservations() {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs uppercase font-semibold tracking-wider text-gold-400 mb-3 flex items-center gap-2">
-                      <Sparkles size={16} className="text-gold-400" /> Select Experience / Event Type
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[
-                        { id: 'standard', title: 'Standard Lounge & Dining', tag: '✨ No Deposit Required', deposit: false, desc: 'Casual drinks, brunch & dinner' },
-                        { id: 'weekend-dj', title: 'Friday / Saturday DJ Night', tag: '⚡ $50 Deposit Hold', deposit: true, desc: 'Peak nightlife & resident DJs' },
-                        { id: 'vip-party', title: 'VIP Special Event', tag: '⚡ $50 Deposit Hold', deposit: true, desc: 'Bottle service & VIP booths' },
-                      ].map((evt) => {
-                        const selected = form.occasion === evt.title || (evt.id === 'standard' && (form.occasion === 'None' || form.occasion === 'Standard Lounge & Dining'));
-                        return (
-                          <button
-                            type="button"
-                            key={evt.id}
-                            onClick={() => {
-                              update('occasion', evt.title);
-                              setUserWantsDeposit(evt.deposit);
-                            }}
-                            className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                              selected
-                                ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20'
-                                : 'bg-ink-900/50 border-ink-700 text-ink-300 hover:border-gold-500/40'
-                            }`}
-                          >
-                            <div>
-                              <div className="flex items-center justify-between gap-2 mb-1">
-                                <span className="font-semibold text-xs text-ink-100">{evt.title}</span>
-                              </div>
-                              <p className="text-[11px] text-ink-400 leading-snug">{evt.desc}</p>
-                            </div>
-                            <span className={`inline-block mt-3 text-[10px] font-bold px-2 py-0.5 rounded-full border self-start ${
-                              evt.deposit
-                                ? 'bg-gold-400/20 text-gold-300 border-gold-400/40'
-                                : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                            }`}>
-                              {evt.tag}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+
 
                   {/* DYNAMIC POLICY NOTIFICATION BANNER */}
                   {hasSelectedDate && (
-                    <div className={`p-4 rounded-xl border text-xs flex items-center justify-between gap-3 ${
-                      isDepositRecommended
+                    <div className={`p-4 rounded-xl border text-xs flex items-center justify-between gap-3 ${isDepositRecommended
                         ? 'bg-gold-950/40 border-gold-500/40 text-gold-200'
                         : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                    }`}>
+                      }`}>
                       <div className="flex items-center gap-2">
                         <Info size={16} className="shrink-0" />
                         <span>{depositResult.reason}</span>
@@ -485,9 +449,11 @@ export default function Reservations() {
                         setErrorMsg('');
                         setStep(2);
                       }}
-                      className="btn-gold py-3.5 px-8 text-xs tracking-[0.2em] uppercase font-semibold rounded-sm shadow-md inline-flex items-center gap-2"
+                      className="btn-gold !py-2.5 sm:!py-3.5 !px-4 sm:!px-8 !text-xs font-bold tracking-wider sm:tracking-[0.16em] uppercase rounded-sm shadow-md inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
                     >
-                      CONTINUE TO TIME SLOT <ChevronRight size={16} />
+                      <span className="sm:hidden">NEXT STEP</span>
+                      <span className="hidden sm:inline">CONTINUE TO TIME SLOT</span>
+                      <ChevronRight size={15} />
                     </button>
                   </div>
                 </div>
@@ -501,56 +467,54 @@ export default function Reservations() {
                       <Clock size={16} className="text-gold-400" /> Select Time Slot
                     </label>
                     <div className="space-y-4">
-                      {timeSlotGroups.map((group) => (
-                        <div key={group.name} className="space-y-2">
-                          <span className="text-[11px] font-semibold text-ink-400 uppercase tracking-wider block">
-                            {group.name}
-                          </span>
-                          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                            {group.slots.map((slot) => (
-                              <button
-                                type="button"
-                                key={slot}
-                                onClick={() => update('reservation_time', slot)}
-                                className={`py-2.5 px-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${
-                                  form.reservation_time === slot
-                                    ? 'bg-gold-gradient text-ink-950 shadow-md scale-[1.02]'
-                                    : 'bg-ink-900/60 border border-ink-700/60 text-ink-200 hover:border-gold-400/50'
-                                }`}
-                              >
-                                {slot}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                      {timeSlotGroups.map((group) => {
+                        // Selected date day of week check:
+                        // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
+                        const selectedDate = form.reservation_date ? new Date(form.reservation_date + 'T00:00:00') : null;
+                        const dayOfWeek = selectedDate ? selectedDate.getDay() : null;
+                        const isHappyHourDay = dayOfWeek === 0 || dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4; // Sun-Thu
+                        const isLateClosing = dayOfWeek === 5 || dayOfWeek === 6; // Fri or Sat (closes 4:00 AM)
 
-                  <div>
-                    <label className="block text-xs uppercase font-semibold tracking-wider text-gold-400 mb-3">
-                      Select Preferred Seating Atmosphere
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {seatingAreas.map((area) => {
-                        const Icon = area.icon;
-                        const selected = form.seating_area === area.id;
+                        // Filter late night slots based on closing times (2:00 AM on Mon-Thu/Sun, 4:00 AM on Fri-Sat)
+                        const filteredSlots = group.slots.filter((slot) => {
+                          if (group.name.includes('Late Night')) {
+                            if (!isLateClosing && (slot === '2:00 AM' || slot === '2:30 AM' || slot === '3:00 AM' || slot === '3:30 AM')) {
+                              return false;
+                            }
+                          }
+                          return true;
+                        });
+
+                        if (filteredSlots.length === 0) return null;
+
+                        const showHappyHourTag = group.isHappyHourEligible && isHappyHourDay;
+
                         return (
-                          <div
-                            key={area.id}
-                            onClick={() => update('seating_area', area.id)}
-                            className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-start gap-3.5 ${
-                              selected
-                                ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20'
-                                : 'bg-ink-900/50 border-ink-700 text-ink-300 hover:border-gold-500/40'
-                            }`}
-                          >
-                            <div className={`p-2.5 rounded-xl ${selected ? 'bg-gold-400 text-ink-950' : 'bg-ink-800 text-gold-400'}`}>
-                              <Icon size={20} />
+                          <div key={group.name} className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-semibold text-ink-400 uppercase tracking-wider block">
+                                {group.name}
+                              </span>
+                              {showHappyHourTag && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gold-400/20 text-gold-300 border border-gold-400/40">
+                                  🍹 HAPPY HOUR SPECIAL (SUN – THU 5–8 PM)
+                                </span>
+                              )}
                             </div>
-                            <div>
-                              <h4 className="text-sm font-semibold text-ink-100">{area.title}</h4>
-                              <p className="text-xs text-ink-400 mt-0.5">{area.desc}</p>
+                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                              {filteredSlots.map((slot) => (
+                                <button
+                                  type="button"
+                                  key={slot}
+                                  onClick={() => update('reservation_time', slot)}
+                                  className={`py-2.5 px-3 rounded-xl text-xs font-semibold tracking-wide transition-all ${form.reservation_time === slot
+                                      ? 'bg-gold-gradient text-ink-950 shadow-md scale-[1.02]'
+                                      : 'bg-ink-900/60 border border-ink-700/60 text-ink-200 hover:border-gold-400/50'
+                                    }`}
+                                >
+                                  {slot}
+                                </button>
+                              ))}
                             </div>
                           </div>
                         );
@@ -558,17 +522,19 @@ export default function Reservations() {
                     </div>
                   </div>
 
+
+
                   {errorMsg && (
                     <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
                       <AlertCircle size={15} /> {errorMsg}
                     </div>
                   )}
 
-                  <div className="pt-4 flex items-center justify-between">
+                  <div className="pt-4 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="px-6 py-3 rounded-full border border-ink-700 text-ink-300 hover:text-gold-200 text-xs font-medium inline-flex items-center gap-1.5"
+                      className="btn-outline-gold !py-2.5 sm:!py-3.5 !px-3 sm:!px-6 !text-xs font-bold inline-flex items-center gap-1.5"
                     >
                       <ChevronLeft size={14} /> Back
                     </button>
@@ -583,9 +549,11 @@ export default function Reservations() {
                         setErrorMsg('');
                         setStep(3);
                       }}
-                      className="btn-gold py-3.5 px-8 text-xs tracking-[0.2em] uppercase font-semibold rounded-sm shadow-md inline-flex items-center gap-2"
+                      className="btn-gold !py-2.5 sm:!py-3.5 !px-4 sm:!px-8 !text-xs font-bold tracking-wider sm:tracking-[0.16em] uppercase rounded-sm shadow-md inline-flex items-center gap-1.5"
                     >
-                      CONTINUE TO DETAILS <ChevronRight size={16} />
+                      <span className="sm:hidden">NEXT STEP</span>
+                      <span className="hidden sm:inline">CONTINUE TO DETAILS</span>
+                      <ChevronRight size={15} />
                     </button>
                   </div>
                 </div>
@@ -639,11 +607,10 @@ export default function Reservations() {
                           key={occ}
                           type="button"
                           onClick={() => update('occasion', occ)}
-                          className={`p-3 rounded-xl border text-xs font-medium text-left transition-all ${
-                            form.occasion === occ
+                          className={`p-3 rounded-xl border text-xs font-medium text-left transition-all ${form.occasion === occ
                               ? 'bg-gold-400/20 border-gold-400 text-gold-200 font-semibold'
                               : 'bg-ink-900/60 border-ink-700/60 text-ink-300 hover:border-ink-500'
-                          }`}
+                            }`}
                         >
                           {occ}
                         </button>
@@ -652,7 +619,7 @@ export default function Reservations() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-ink-300 mb-1.5">Special Requests & Allergies</label>
+                    <label className="block text-xs font-medium text-ink-300 mb-1.5 uppercase">Special Requests & Notes</label>
                     <textarea
                       rows={2}
                       placeholder="High-top preferred, birthday candles, dietary notes…"
@@ -668,11 +635,11 @@ export default function Reservations() {
                     </div>
                   )}
 
-                  <div className="pt-4 flex items-center justify-between">
+                  <div className="pt-4 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() => setStep(2)}
-                      className="px-6 py-3 rounded-full border border-ink-700 text-ink-300 hover:text-gold-200 text-xs font-medium inline-flex items-center gap-1.5"
+                      className="btn-outline-gold !py-2.5 sm:!py-3.5 !px-3 sm:!px-6 !text-xs font-bold inline-flex items-center gap-1.5"
                     >
                       <ChevronLeft size={14} /> Back
                     </button>
@@ -684,9 +651,11 @@ export default function Reservations() {
                           setStep(4);
                         }
                       }}
-                      className="btn-gold py-3.5 px-8 text-xs tracking-[0.2em] uppercase font-semibold rounded-sm shadow-md inline-flex items-center gap-2"
+                      className="btn-gold !py-2.5 sm:!py-3.5 !px-4 sm:!px-8 !text-xs font-bold tracking-wider sm:tracking-[0.16em] uppercase rounded-sm shadow-md inline-flex items-center gap-1.5"
                     >
-                      CONTINUE TO FINAL STEP <ChevronRight size={16} />
+                      <span className="sm:hidden">NEXT STEP</span>
+                      <span className="hidden sm:inline">CONTINUE TO FINAL STEP</span>
+                      <ChevronRight size={15} />
                     </button>
                   </div>
                 </div>
@@ -709,11 +678,10 @@ export default function Reservations() {
                       <button
                         type="button"
                         onClick={() => setUserWantsDeposit(true)}
-                        className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                          activeDeposit
+                        className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${activeDeposit
                             ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20 shadow-lg'
                             : 'bg-ink-950/60 border-ink-700/60 text-ink-300 hover:border-gold-500/40'
-                        }`}
+                          }`}
                       >
                         <div>
                           <div className="flex items-center justify-between mb-1">
@@ -733,11 +701,10 @@ export default function Reservations() {
                       <button
                         type="button"
                         onClick={() => setUserWantsDeposit(false)}
-                        className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${
-                          !activeDeposit
+                        className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${!activeDeposit
                             ? 'bg-emerald-950/40 border-emerald-500 text-emerald-100 ring-2 ring-emerald-500/20 shadow-lg'
                             : 'bg-ink-950/60 border-ink-700/60 text-ink-300 hover:border-emerald-500/40'
-                        }`}
+                          }`}
                       >
                         <div>
                           <div className="flex items-center justify-between mb-1">
@@ -805,11 +772,10 @@ export default function Reservations() {
                           <button
                             type="button"
                             onClick={() => update('payment_method', 'card')}
-                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${
-                              form.payment_method === 'card'
+                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${form.payment_method === 'card'
                                 ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20'
                                 : 'bg-ink-900/50 border-ink-700 text-ink-300 hover:border-gold-500/40'
-                            }`}
+                              }`}
                           >
                             <CreditCard size={18} className={form.payment_method === 'card' ? 'text-gold-300' : 'text-ink-400'} />
                             <div>
@@ -821,11 +787,10 @@ export default function Reservations() {
                           <button
                             type="button"
                             onClick={() => update('payment_method', 'googlepay')}
-                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${
-                              form.payment_method === 'googlepay'
+                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${form.payment_method === 'googlepay'
                                 ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20'
                                 : 'bg-ink-900/50 border-ink-700 text-ink-300 hover:border-gold-500/40'
-                            }`}
+                              }`}
                           >
                             <Wallet size={18} className={form.payment_method === 'googlepay' ? 'text-gold-300' : 'text-ink-400'} />
                             <div>
@@ -837,11 +802,10 @@ export default function Reservations() {
                           <button
                             type="button"
                             onClick={() => update('payment_method', 'venue_hold')}
-                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${
-                              form.payment_method === 'venue_hold'
+                            className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${form.payment_method === 'venue_hold'
                                 ? 'bg-gold-900/40 border-gold-400 text-gold-100 ring-2 ring-gold-500/20'
                                 : 'bg-ink-900/50 border-ink-700 text-ink-300 hover:border-gold-500/40'
-                            }`}
+                              }`}
                           >
                             <ShieldCheck size={18} className={form.payment_method === 'venue_hold' ? 'text-gold-300' : 'text-ink-400'} />
                             <div>
@@ -927,11 +891,11 @@ export default function Reservations() {
                     </div>
                   )}
 
-                  <div className="pt-4 flex items-center justify-between">
+                  <div className="pt-4 flex items-center justify-between gap-2">
                     <button
                       type="button"
                       onClick={() => setStep(3)}
-                      className="px-6 py-3 rounded-full border border-ink-700 text-ink-300 hover:text-gold-200 text-xs font-medium inline-flex items-center gap-1.5"
+                      className="btn-outline-gold !py-2.5 sm:!py-3.5 !px-3 sm:!px-6 !text-xs font-bold inline-flex items-center gap-1.5"
                     >
                       <ChevronLeft size={14} /> Back
                     </button>
@@ -939,7 +903,7 @@ export default function Reservations() {
                     <button
                       type="submit"
                       disabled={status === 'submitting'}
-                      className="btn-gold py-4 px-10 text-xs tracking-[0.2em] uppercase font-semibold rounded-sm shadow-lg inline-flex items-center gap-2 disabled:opacity-50 transition-all"
+                      className="btn-gold !py-2.5 sm:!py-3.5 !px-4 sm:!px-8 !text-xs tracking-wider sm:tracking-[0.16em] uppercase font-bold rounded-sm shadow-lg inline-flex items-center gap-1.5 disabled:opacity-50 transition-all"
                     >
                       {status === 'submitting' ? (
                         <>
@@ -948,7 +912,7 @@ export default function Reservations() {
                       ) : activeDeposit ? (
                         `PAY $${defaultDepositAmount} & CONFIRM`
                       ) : (
-                        `RESERVE A TABLE`
+                        `CONFIRM TABLE`
                       )}
                     </button>
                   </div>
@@ -967,36 +931,31 @@ export default function Reservations() {
               </h3>
 
               <div className="mt-4 space-y-3 text-xs sm:text-sm">
-                <div className="flex justify-between items-center text-ink-300">
-                  <span>Guests:</span>
-                  <span className="font-semibold text-gold-200">{form.guest_count} Person{form.guest_count > 1 ? 's' : ''}</span>
+                <div className="flex justify-between items-start sm:items-center gap-2 text-ink-300">
+                  <span className="shrink-0">Guests:</span>
+                  <span className="font-semibold text-gold-200 text-right">{form.guest_count} Person{form.guest_count > 1 ? 's' : ''}</span>
                 </div>
-                <div className="flex justify-between items-center text-ink-300">
-                  <span>Date:</span>
-                  <span className="font-semibold text-ink-100">{form.reservation_date || 'Select Date'}</span>
+                <div className="flex justify-between items-start sm:items-center gap-2 text-ink-300">
+                  <span className="shrink-0">Date:</span>
+                  <span className="font-semibold text-ink-100 text-right">{form.reservation_date || 'Select Date'}</span>
                 </div>
-                <div className="flex justify-between items-center text-ink-300">
-                  <span>Time Slot:</span>
-                  <span className="font-semibold text-gold-300">{form.reservation_time || 'Select Time'}</span>
+                <div className="flex justify-between items-start sm:items-center gap-2 text-ink-300">
+                  <span className="shrink-0">Time Slot:</span>
+                  <span className="font-semibold text-gold-300 text-right">{form.reservation_time || 'Select Time'}</span>
                 </div>
-                <div className="flex justify-between items-center text-ink-300">
-                  <span>Seating Area:</span>
-                  <span className="font-semibold text-ink-100">{form.seating_area}</span>
-                </div>
-                <div className="flex justify-between items-center text-ink-300 pt-2 border-t border-ink-700/60">
-                  <span>Table Deposit Hold:</span>
-                  <span className={`font-bold ${
-                    !hasSelectedDate
+                <div className="flex justify-between items-start sm:items-center gap-2 text-ink-300 pt-2 border-t border-ink-700/60">
+                  <span className="shrink-0">Table Deposit Hold:</span>
+                  <span className={`font-bold text-right max-w-[180px] sm:max-w-none ${!hasSelectedDate
                       ? 'text-ink-400 font-normal'
                       : activeDeposit
-                      ? 'text-gold-300'
-                      : 'text-emerald-300'
-                  }`}>
+                        ? 'text-gold-300'
+                        : 'text-emerald-300'
+                    }`}>
                     {!hasSelectedDate
                       ? 'Select Date'
                       : activeDeposit
-                      ? `$${defaultDepositAmount}.00 (100% Credited)`
-                      : '$0.00 (Booked Without Deposit)'}
+                        ? `$${defaultDepositAmount}.00 (100% Credited)`
+                        : '$0.00 (Booked Without Deposit)'}
                   </span>
                 </div>
               </div>
@@ -1007,8 +966,8 @@ export default function Reservations() {
                   {!hasSelectedDate
                     ? 'Pick your reservation date to view table hold & deposit options.'
                     : activeDeposit
-                    ? '100% credited towards your food & drinks bill upon arrival.'
-                    : 'Instant table hold with zero upfront deposit required.'}
+                      ? '100% credited towards your food & drinks bill upon arrival.'
+                      : 'Instant table hold with zero upfront deposit required.'}
                 </span>
               </div>
             </div>
@@ -1040,121 +999,7 @@ export default function Reservations() {
         </div>
       </div>
 
-      {/* DISCRETE FLOATING MANAGER CONFIG BUTTON (BOTTOM-RIGHT) */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          type="button"
-          onClick={() => setShowManagerModal(true)}
-          className="bg-ink-900/90 hover:bg-ink-800 text-gold-300 border border-gold-500/40 hover:border-gold-400 px-4 py-2.5 rounded-full shadow-2xl backdrop-blur-xl flex items-center gap-2 text-xs font-medium transition-all"
-        >
-          <Settings size={15} />
-          <span>Deposit Rules Settings</span>
-        </button>
-      </div>
 
-      {/* MANAGER CONFIGURATION MODAL */}
-      {showManagerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-950/80 backdrop-blur-md animate-fade-in">
-          <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-gold-400/40 max-w-lg w-full shadow-2xl relative space-y-5">
-            <button
-              onClick={() => setShowManagerModal(false)}
-              className="absolute top-5 right-5 p-2 rounded-full text-ink-400 hover:text-gold-200 hover:bg-ink-800/80 transition-colors"
-            >
-              <X size={20} />
-            </button>
-
-            <div>
-              <div className="flex items-center gap-2 text-gold-400 font-bold text-xs uppercase tracking-wider mb-1">
-                <Settings size={16} /> Venue Manager Controls
-              </div>
-              <h3 className="font-display text-2xl text-ink-100 font-bold">
-                Configure Deposit Rules
-              </h3>
-              <p className="text-xs text-ink-300 mt-1">
-                Toggle deposit requirements on/off by day of the week, party size, or global master switch.
-              </p>
-            </div>
-
-            <div className="space-y-4 text-xs">
-              <div className="flex items-center justify-between bg-ink-900/80 p-3.5 rounded-2xl border border-ink-700/60">
-                <div>
-                  <span className="font-bold text-ink-100 block">Master Deposit Switch</span>
-                  <span className="text-ink-400 text-[11px]">Globally turn deposits on or off</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => updatePolicy((p) => ({ ...p, enabledGlobal: !p.enabledGlobal }))}
-                  className={`px-4 py-2 rounded-xl font-bold transition-all ${
-                    depositPolicy.enabledGlobal
-                      ? 'bg-gold-400 text-ink-950 shadow-md'
-                      : 'bg-ink-800 text-ink-400 border border-ink-700'
-                  }`}
-                >
-                  {depositPolicy.enabledGlobal ? 'ENABLED' : 'DISABLED'}
-                </button>
-              </div>
-
-              <div>
-                <label className="block font-bold text-gold-300 mb-2 uppercase tracking-wider text-[10px]">
-                  Days Requiring Reservation Deposit
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {weekDaysList.map((day) => {
-                    const active = depositPolicy.requiredDays.includes(day);
-                    return (
-                      <button
-                        key={day}
-                        type="button"
-                        onClick={() => toggleDayDeposit(day)}
-                        className={`px-3.5 py-2 rounded-xl border font-medium transition-all flex items-center gap-1.5 ${
-                          active
-                            ? 'bg-gold-400/20 border-gold-400 text-gold-200'
-                            : 'bg-ink-900/60 border-ink-700 text-ink-400 hover:border-ink-500'
-                        }`}
-                      >
-                        {active && <Check size={12} className="text-gold-300" />}
-                        {day}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between bg-ink-900/80 p-3.5 rounded-2xl border border-ink-700/60">
-                <div>
-                  <span className="font-bold text-ink-100 block">Mandatory Large Party Threshold</span>
-                  <span className="text-ink-400 text-[11px]">Parties equal to or larger always require deposit</span>
-                </div>
-                <select
-                  value={depositPolicy.minPartySizeForMandatoryDeposit}
-                  onChange={(e) =>
-                    updatePolicy((p) => ({
-                      ...p,
-                      minPartySizeForMandatoryDeposit: parseInt(e.target.value, 10),
-                    }))
-                  }
-                  className="bg-ink-800 border border-ink-600 text-gold-200 px-3 py-2 rounded-xl font-medium text-xs focus:outline-none"
-                >
-                  <option value={4}>4+ Guests</option>
-                  <option value={6}>6+ Guests</option>
-                  <option value={8}>8+ Guests</option>
-                  <option value={10}>10+ Guests</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="pt-3 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setShowManagerModal(false)}
-                className="bg-gold-gradient text-ink-950 font-bold px-6 py-2.5 rounded-full text-xs"
-              >
-                Apply & Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

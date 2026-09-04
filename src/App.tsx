@@ -11,11 +11,14 @@ import ContactPage from '@/pages/ContactPage';
 import PrivateEventsPage from '@/pages/PrivateEventsPage';
 import HookahPage from '@/pages/HookahPage';
 
+import HappyHourPage from '@/pages/HappyHourPage';
+
 const pageIdToPath: Record<PageId, string> = {
   home: '/',
   menu: '/menu',
   hookah: '/hookah',
   events: '/events',
+  'happy-hour': '/happy-hour',
   'private-events': '/private-events',
   reservations: '/reservations',
   about: '/about',
@@ -28,6 +31,7 @@ function pathToPageId(pathname: string): PageId {
   if (cleanPath.startsWith('/menu')) return 'menu';
   if (cleanPath === '/hookah') return 'hookah';
   if (cleanPath === '/events' || cleanPath === '/weekends') return 'events';
+  if (cleanPath === '/happy-hour') return 'happy-hour';
   if (cleanPath === '/private-events') return 'private-events';
   if (cleanPath === '/reservations') return 'reservations';
   if (cleanPath === '/about') return 'about';
@@ -76,6 +80,7 @@ function AppContent() {
           <Route path="/hookah" element={<HookahPage onNavigate={handleNavigate} />} />
           <Route path="/events" element={<Events onNavigate={handleNavigate} />} />
           <Route path="/weekends" element={<Events onNavigate={handleNavigate} />} />
+          <Route path="/happy-hour" element={<HappyHourPage onNavigate={handleNavigate} />} />
           <Route path="/private-events" element={<PrivateEventsPage onNavigate={handleNavigate} />} />
           <Route path="/reservations" element={<Reservations />} />
           <Route path="/about" element={<About onNavigate={handleNavigate} />} />

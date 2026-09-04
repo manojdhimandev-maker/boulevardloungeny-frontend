@@ -28,27 +28,29 @@ export const TransformationSection: React.FC<TransformationSectionProps> = ({ on
         </div>
 
         {/* TOGGLE BUTTONS */}
-        <div className="flex justify-center mb-12">
-          <div className="p-1.5 glass-panel rounded-full border border-gold-400/30 inline-flex gap-2">
+        <div className="flex justify-center mb-8 sm:mb-12 w-full max-w-2xl mx-auto">
+          <div className="p-1.5 glass-panel rounded-xl sm:rounded-full border border-gold-400/30 flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('day')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold font-fashion tracking-widest uppercase transition-all ${
+              className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-[11px] sm:text-xs font-bold font-fashion tracking-wider sm:tracking-widest uppercase transition-all w-full sm:w-auto text-center ${
                 activeTab === 'day'
                   ? 'bg-gold-400 text-ink-950 shadow-lg'
                   : 'text-ink-300 hover:text-gold-400'
               }`}
             >
-              <Sun size={16} /> EARLY EVENING (7 PM - 10 PM)
+              <Sun size={15} className="shrink-0" />
+              <span>EARLY EVENING (7 PM - 10 PM)</span>
             </button>
             <button
               onClick={() => setActiveTab('night')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-bold font-fashion tracking-widest uppercase transition-all ${
+              className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-full text-[11px] sm:text-xs font-bold font-fashion tracking-wider sm:tracking-widest uppercase transition-all w-full sm:w-auto text-center ${
                 activeTab === 'night'
                   ? 'bg-gold-400 text-ink-950 shadow-lg'
                   : 'text-ink-300 hover:text-gold-400'
               }`}
             >
-              <Moon size={16} /> AFTER DARK (10 PM - LATE)
+              <Moon size={15} className="shrink-0" />
+              <span>AFTER DARK (10 PM - LATE)</span>
             </button>
           </div>
         </div>

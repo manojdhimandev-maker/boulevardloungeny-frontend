@@ -90,7 +90,6 @@ export const InstagramShowcaseSection: React.FC = () => {
           rel="noopener noreferrer"
           className="btn-outline-gold inline-flex py-3.5 px-8 text-xs font-fashion tracking-[0.18em] uppercase font-semibold rounded-full shadow-lg"
         >
-          FOLLOW ON INSTAGRAM
         </a>
       </div>
     </section>
