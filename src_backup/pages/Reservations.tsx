@@ -23,6 +23,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+// import venueInfo from '@/data/venue';
 import { venueInfo } from '@/data/venue';
 
 type FormState = {

@@ -111,59 +111,23 @@ export default function Reservations() {
   const [errorMsg, setErrorMsg] = useState('');
   const [showManagerModal, setShowManagerModal] = useState(false);
 
-  // User manual deposit toggle on Step 4 (null = default policy recommendation, true = with deposit, false = without deposit)
-  const [userWantsDeposit, setUserWantsDeposit] = useState<boolean | null>(null);
-
-  // Dynamic deposit policy state (persisted locally)
-  const [depositPolicy, setDepositPolicy] = useState<DepositPolicy>(() => {
-    try {
-      const saved = localStorage.getItem('boulevard_deposit_policy');
-      return saved ? JSON.parse(saved) : defaultDepositPolicy;
-    } catch {
-      return defaultDepositPolicy;
-    }
-  });
-
   const today = new Date().toISOString().split('T')[0];
   const hasSelectedDate = Boolean(form.reservation_date);
 
-  // Evaluate deposit requirement dynamically based on date & party size
-  const depositResult = hasSelectedDate
-    ? checkDepositRequirement(form.reservation_date, form.guest_count, undefined, depositPolicy)
-    : { isRequired: false, amount: 0, reason: 'Select a date to verify deposit requirement.' };
+  // User choice deposit toggle (defaults to false = no deposit, true = user voluntarily chooses deposit hold)
+  const [userWantsDeposit, setUserWantsDeposit] = useState<boolean>(false);
 
-  const defaultDepositAmount = depositResult.amount || 50;
-  const isDepositRecommended = hasSelectedDate && depositResult.isRequired;
+  const defaultDepositAmount = 50;
 
-  // Active deposit decision: user override or recommended policy default
-  const activeDeposit = userWantsDeposit !== null ? userWantsDeposit : isDepositRecommended;
+  // Active deposit decision: ONLY true if user explicitly selects deposit hold
+  const activeDeposit = Boolean(userWantsDeposit);
   const finalDepositAmount = activeDeposit ? defaultDepositAmount : 0;
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
   };
 
-  const updatePolicy = (updater: (prev: DepositPolicy) => DepositPolicy) => {
-    setDepositPolicy((prev) => {
-      const next = updater(prev);
-      try {
-        localStorage.setItem('boulevard_deposit_policy', JSON.stringify(next));
-      } catch (e) {
-        console.warn('Could not save deposit policy:', e);
-      }
-      return next;
-    });
-  };
 
-  const toggleDayDeposit = (day: string) => {
-    updatePolicy((prev) => {
-      const exists = prev.requiredDays.includes(day);
-      const nextDays = exists
-        ? prev.requiredDays.filter((d) => d !== day)
-        : [...prev.requiredDays, day];
-      return { ...prev, requiredDays: nextDays };
-    });
-  };
 
   const validateDetailsStep = () => {
     if (!form.guest_name.trim() || form.guest_name.trim().length < 2) {
@@ -244,7 +208,7 @@ export default function Reservations() {
     setStep(1);
     setStatus('idle');
     setErrorMsg('');
-    setUserWantsDeposit(null);
+    setUserWantsDeposit(false);
   };
 
   const googleCalendarUrl = () => {
@@ -422,18 +386,15 @@ export default function Reservations() {
 
 
 
-                  {/* DYNAMIC POLICY NOTIFICATION BANNER */}
+                  {/* ZERO MANDATORY DEPOSIT BANNER */}
                   {hasSelectedDate && (
-                    <div className={`p-4 rounded-xl border text-xs flex items-center justify-between gap-3 ${isDepositRecommended
-                        ? 'bg-gold-950/40 border-gold-500/40 text-gold-200'
-                        : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                      }`}>
+                    <div className="p-4 rounded-xl border text-xs flex items-center justify-between gap-3 bg-emerald-950/40 border-emerald-500/40 text-emerald-300">
                       <div className="flex items-center gap-2">
                         <Info size={16} className="shrink-0" />
-                        <span>{depositResult.reason}</span>
+                        <span>Instant reservation table hold. Zero upfront deposit required.</span>
                       </div>
                       <span className="font-bold shrink-0">
-                        {isDepositRecommended ? `$${defaultDepositAmount} Hold` : 'No Deposit Required'}
+                        No Deposit Required
                       </span>
                     </div>
                   )}
