@@ -42,14 +42,14 @@ export default function Navbar({ onNavigate, current }: NavbarProps) {
       >
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           {/* BRAND LOGO */}
-          <button onClick={() => go('home')} className="flex items-center gap-2.5 sm:gap-3 group text-left focus:outline-none shrink-0">
+          <button onClick={() => go('home')} className="flex items-center gap-3 sm:gap-4 group text-left focus:outline-none shrink-0">
             <img
               src="/updatedLogo.png"
               alt="The Boulevard Lounge Logo"
-              className="h-10 w-10 sm:h-13 sm:w-13 object-cover rounded-full border-2 border-gold-300 shadow-xl shadow-gold-400/35 transition-all duration-300 bg-black"
+              className="h-14 w-14 sm:h-18 sm:w-18 md:h-20 md:w-20 object-cover rounded-full border-2 border-gold-300 shadow-2xl shadow-gold-400/40 transition-all duration-300 bg-black group-hover:scale-105"
             />
-            <span className="font-fashion text-base sm:text-lg lg:text-xl font-bold tracking-[0.14em] uppercase text-ink-100 group-hover:text-gold-300 transition-colors whitespace-nowrap">
-              The Boulevard
+            <span className="font-fashion text-lg sm:text-xl lg:text-2xl font-bold tracking-[0.14em] uppercase text-ink-100 group-hover:text-gold-300 transition-colors whitespace-nowrap">
+              The Boulevard 
             </span>
           </button>
 
