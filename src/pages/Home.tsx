@@ -54,7 +54,7 @@ export default function Home({ onNavigate }: HomeProps) {
             </div>
 
             <h1
-              className="mt-3 font-fashion text-[clamp(40px,5.5vw,78px)] font-bold uppercase tracking-[0.05em] leading-[0.98] text-ink-100 animate-fade-up"
+              className="mt-3 font-fashion text-[clamp(28px,3.8vw,52px)] font-bold uppercase tracking-[0.05em] leading-[1.05] text-ink-100 animate-fade-up"
               style={{ animationDelay: '0.1s' }}
             >
               COCKTAILS.<br />
